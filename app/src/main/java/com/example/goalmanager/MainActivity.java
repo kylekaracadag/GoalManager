@@ -1,6 +1,9 @@
 package com.example.goalmanager;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.DefaultItemAnimator;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -8,8 +11,12 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
 
-public class MainActivity extends AppCompatActivity {
+import java.util.ArrayList;
 
+public class MainActivity extends AppCompatActivity {
+    private ArrayList<Goal> list;
+    private RecyclerView recyclerView;
+    GoalAdapter goalAdapter;
     Button goalButton;
 
     @Override
@@ -21,12 +28,24 @@ public class MainActivity extends AppCompatActivity {
         getSupportActionBar().hide();
 
         setContentView(R.layout.activity_main);
+        recyclerView = findViewById(R.id.goalsList);
+        list = new ArrayList<>();
 
-        goalButton = findViewById(R.id.addGoalButton);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        list.add(new Goal("Test One"));
+        list.add(new Goal("Test Two"));
+        list.add(new Goal("Test Three"));
+        list.add(new Goal("Test Four"));
+
+        goalAdapter = new GoalAdapter(MainActivity.this, list);
+        recyclerView.setAdapter(goalAdapter);
+
+        goalButton = (Button) findViewById(R.id.addGoalButton);
         goalButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(MainActivity.this, AddGoalActivity.class));
+                Intent intent = new Intent(MainActivity.this, GoalActivity.class);
+                startActivity(intent);
             }
         });
     }
